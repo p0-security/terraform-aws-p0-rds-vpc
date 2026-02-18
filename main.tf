@@ -7,10 +7,6 @@ terraform {
   }
 }
 
-data "aws_iam_role" "p0_connector" {
-  name = var.aws_role_name
-}
-
 # IAM Policy with permissions to describe VPC, list subnets, and describe RDS resources
 resource "aws_iam_policy" "p0_rds_connector_read" {
   name        = "P0RdsConnectorRead-${var.vpc_id}"
