@@ -7,6 +7,15 @@ terraform {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
+locals {
+  aws_account_id = coalesce(var.aws_account_id, data.aws_caller_identity.current.account_id)
+  aws_region     = coalesce(var.aws_region, data.aws_region.current.id)
+}
+
 # IAM Policy with permissions to describe VPC, list subnets, and describe RDS resources
 resource "aws_iam_policy" "p0_rds_connector_read" {
   name        = "P0RdsConnectorRead-${var.vpc_id}"
@@ -24,7 +33,7 @@ resource "aws_iam_policy" "p0_rds_connector_read" {
         Resource = "*"
         Condition = {
           StringEquals = {
-            "ec2:vpc" = "arn:aws:ec2:${var.aws_region}:${var.aws_account_id}:vpc/${var.vpc_id}"
+            "ec2:vpc" = "arn:aws:ec2:${local.aws_region}:${local.aws_account_id}:vpc/${var.vpc_id}"
           }
         }
       },
@@ -37,7 +46,7 @@ resource "aws_iam_policy" "p0_rds_connector_read" {
         Resource = "*"
         Condition = {
           StringEquals = {
-            "ec2:vpc" = "arn:aws:ec2:${var.aws_region}:${var.aws_account_id}:vpc/${var.vpc_id}"
+            "ec2:vpc" = "arn:aws:ec2:${local.aws_region}:${local.aws_account_id}:vpc/${var.vpc_id}"
           }
         }
       },
