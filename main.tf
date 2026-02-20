@@ -22,11 +22,6 @@ resource "aws_iam_policy" "p0_rds_connector_read" {
           "ec2:DescribeVpcs"
         ]
         Resource = "*"
-        Condition = {
-          StringEquals = {
-            "ec2:vpc" = "arn:aws:ec2:${var.aws_region}:${var.aws_account_id}:vpc/${var.vpc_id}"
-          }
-        }
       },
       {
         Sid    = "ListSubnets"
@@ -35,11 +30,6 @@ resource "aws_iam_policy" "p0_rds_connector_read" {
           "ec2:DescribeSubnets"
         ]
         Resource = "*"
-        Condition = {
-          StringEquals = {
-            "ec2:vpc" = "arn:aws:ec2:${var.aws_region}:${var.aws_account_id}:vpc/${var.vpc_id}"
-          }
-        }
       },
       {
         Sid    = "DescribeRDSResources"
